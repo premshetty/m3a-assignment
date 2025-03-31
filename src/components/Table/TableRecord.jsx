@@ -1,7 +1,6 @@
 import React from "react";
 import { extractRows } from "../../utils/utils";
 
-
 const TableRecord = ({ record, detailColumns }) => {
   const rec = extractRows(record);
 
@@ -15,13 +14,22 @@ const TableRecord = ({ record, detailColumns }) => {
 
         if (col.dataIndex === "description") {
           cellClassName += " whitespace-nowrap";
+        } else if (col.dataIndex === "percentage") {
+          cellClassName += " text-right";
+        }
+
+        let value = row[col.dataIndex];
+        if (
+          col.dataIndex === "percentage" &&
+          value !== null &&
+          value !== undefined
+        ) {
+          value = `${value.toFixed(2)}%`;
         }
 
         return (
           <td key={col.key} className={cellClassName}>
-            {row[col.dataIndex] !== null && row[col.dataIndex] !== undefined
-              ? row[col.dataIndex]
-              : "-"}
+            {value !== null && value !== undefined ? value : "-"}
           </td>
         );
       })}

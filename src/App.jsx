@@ -7,7 +7,6 @@ import { buildTree } from "./utils/utils";
 function App() {
   const rawData = tabledata.Data.Table;
   const tree = buildTree(rawData);
-
   const items = [
     {
       key: "1",
@@ -21,7 +20,7 @@ function App() {
     },
   ];
   return (
-    <div className="w-screen">
+    <div className="w-screen ">
       <Tabs defaultActiveKey="1" items={items} />
     </div>
   );

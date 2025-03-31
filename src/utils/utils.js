@@ -15,6 +15,9 @@ export const buildTree = (data) => {
       key: lvl1Name,
       name: lvl1Name,
       children: [],
+      ReportingTotalAsset: recordsLvl1[0]?.ReportingTotalAsset || 0, 
+      percentage :  accumulateSums(recordsLvl1, ["Col8"]).Col8.toFixed(2),
+      sumOfRecords : accumulateSums(recordsLvl1, ["Col7"]).Col7
     };
 
     const level2Map = new Map();
@@ -76,6 +79,7 @@ export const buildTree = (data) => {
             name: lvl4Name,
             records: recordsLvl4,
           };
+
           childNode3.children.push(childNode4);
         });
 
@@ -90,38 +94,34 @@ export const buildTree = (data) => {
 
   return tree;
 };
-
 export function extractRows(data) {
   const fieldKeys = [
     "cc",
     "quantity",
     "description",
-    "esgRating",
     "costPriceFx",
     "currentPrice",
     "valuation",
     "totalChf",
+    "percentage",
     "plTotal",
     "plYtd",
-    "percentage",
   ];
 
   const rows = [];
   let rowIndex = 1;
-  const hasOwn = Object.prototype.hasOwnProperty;
 
   while (true) {
     const rowPrefix = `Row${rowIndex}Col`;
 
-    const hasRow = fieldKeys.some((_, colIndex) => {
-      return hasOwn.call(data, `${rowPrefix}${colIndex + 1}`);
-    });
-
-    if (!hasRow) {
-      break;
-    }
+    // Check if any column exists for this row
+    const hasRow = fieldKeys.some((_, colIndex) =>
+      Object.prototype.hasOwnProperty.call(data, `${rowPrefix}${colIndex + 1}`)
+    );
+    if (!hasRow) break;
 
     const rowObj = { key: `Row${rowIndex}` };
+
     fieldKeys.forEach((field, colIndex) => {
       rowObj[field] = data[`${rowPrefix}${colIndex + 1}`];
     });
@@ -133,5 +133,36 @@ export function extractRows(data) {
 
     rowIndex++;
   }
+
   return rows;
+}
+
+export function sumColumn(data, colName) {
+  let sum = 0;
+  let rowIndex = 1;
+
+  while (true) {
+    const rowPrefix = `Row${rowIndex}Col`;
+    const colIndex = parseInt(colName.replace(/[^0-9]/g, ""));
+    const colKey = `${rowPrefix}${colIndex}`;
+
+    if (!Object.prototype.hasOwnProperty.call(data, colKey)) break;
+
+    const value = parseFloat(data[colKey]) || 0;
+    sum += value;
+
+    rowIndex++;
+  }
+
+  return sum;
+}
+
+export function accumulateSums(dataArray, colNames) {
+  return colNames.reduce((acc, colName) => {
+    acc[colName] = dataArray.reduce(
+      (sum, data) => sum + sumColumn(data, colName),
+      0
+    );
+    return acc;
+  }, {});
 }
