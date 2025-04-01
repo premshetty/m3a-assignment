@@ -1,13 +1,13 @@
 import React from "react";
 import { extractRows } from "../../utils/utils";
 
-const TableRecord = ({ record, detailColumns }) => {
+const TableRecord = ({ record, detailColumns, parentindex }) => {
   const rec = extractRows(record);
 
   return rec.map((row, index) => (
     <tr
       key={index}
-      className="border-b-2 border-white even:bg-blue-100 odd:bg-blue-200"
+      className={` border-0 ${parentindex % 2 === 0 ? "bg-gray-200" : "bg-white"}`}
     >
       {detailColumns.map((col) => {
         let cellClassName = "px-4 py-2 ";

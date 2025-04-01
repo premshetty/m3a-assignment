@@ -62,7 +62,7 @@ const TableBody = ({ tree, detailColumns }) => {
       );
     } else {
       return (
-        <TableRecord key={index} record={el} detailColumns={detailColumns} />
+        <TableRecord key={index} parentindex={index} record={el} detailColumns={detailColumns} />
       );
     }
   });
