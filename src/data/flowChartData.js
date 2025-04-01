@@ -246,14 +246,14 @@ export const reactFlowData = {
     {
       id: "e1-22",
       source: "2",
-      type: "red",
+      type: "default",
       target: "1",
       animated: true,
     },
     {
       id: "e1-23",
       source: "4",
-      type: "red",
+      type: "default",
       target: "1",
       animated: true,
     },
@@ -261,7 +261,7 @@ export const reactFlowData = {
     {
       id: "e1-24",
       source: "1",
-      type: "red",
+      type: "default",
       target: "17",
       animated: true,
     },

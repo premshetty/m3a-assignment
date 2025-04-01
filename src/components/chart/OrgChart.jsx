@@ -4,22 +4,19 @@ import React, { useEffect } from "react";
 import ReactFlow, {
   addEdge,
   Background,
-  BezierEdge,
   ConnectionLineType,
   Controls,
   MiniMap,
   ReactFlowProvider,
-  StepEdge,
-  StraightEdge,
   useEdgesState,
   useNodesState,
 } from "react-flow-renderer";
 
-import NodeHeaderNode from "./CardNode";
-
 import { reactFlowData } from "../../data/flowChartData";
+import useChartTypes from "./typeExport";
 
 function OrgChart() {
+  const { edgeTypes, nodeTypes } = useChartTypes();
   const storedNodes =
     JSON.parse(localStorage.getItem("nodes")) || reactFlowData.nodes;
   const storedEdges =
@@ -39,16 +36,6 @@ function OrgChart() {
   const onConnect = (params) => {
     setEdges((eds) => addEdge(params, eds));
     setEdges((eds) => (params, eds));
-  };
-
-  const nodeTypes = {
-    nodeHeaderNode: NodeHeaderNode,
-  };
-  const edgeTypes = {
-
-    bezier: BezierEdge,
-    step: StepEdge,
-    straight: StraightEdge,
   };
 
   return (
